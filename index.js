@@ -27,6 +27,9 @@ app.post('/getEvents', async function(req, res){
   },{
     model: db.User,
     as:'owner'
+  },{
+    model:db.Task,
+    as:'Tasks'
   }]});
   var myEvents = allEvents.filter(event=>{
     return event.users.some(userInEvent=>{
