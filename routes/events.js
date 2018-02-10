@@ -46,7 +46,7 @@ router.put('/:id',async function(req, res){
     toUpdate.date = new Date(body.date);
   }
   if(typeof(body.location) !== "undefined"){
-    toUpdate.place = body.location;
+    toUpdate.location = body.location;
   }
 
   await event.update(toUpdate);
