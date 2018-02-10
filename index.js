@@ -1,4 +1,5 @@
 const db =  require("./models/index.js");
+
 const Op = db.Sequelize.Op;
 require('./relations.js');
 
@@ -202,8 +203,15 @@ app.post('/createUser', async function(req, res){
   res.status(200).send("Created User");
 })
 
-console.log("Listening on port " + port);
-app.listen(port);
+//Creating db tables if they don't exist yet
+async function f(){
+  db.sequelize.sync();
+  console.log("Listening on port " + port);
+  app.listen(port);
+};
+
+f();
+
 
 
 function makeid(len) {
