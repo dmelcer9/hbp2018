@@ -1,16 +1,17 @@
 const db =  require("./models/index.js");
+require('./relations.js');
 
 var express = require("express");
 var bodyParser = require("body-parser");
 var bcrypt = require('bcrypt');
 var app = express();
 
+var port = 8080;
+
 var authMiddleware = require("./user-auth.js")(db,['/createUser']);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
-var models = require('./models');
 
 app.use('/',authMiddleware);
 
@@ -48,12 +49,5 @@ app.post('/createUser', async function(req, res){
   res.status(200).send("Created User");
 })
 
-var f = async function(){
-  await db.User.sync();
-
-  console.log("Listening");
-  app.listen(8080);
-
-};
-
-f();
+console.log("Listening on port " + port);
+app.listen(port);

@@ -4,7 +4,9 @@
   "description": "Backend of project for Hackbeanpot 2018",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clear": "node recreateDB.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
