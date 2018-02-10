@@ -1,0 +1,28 @@
+{
+  "name": "hackbeanpot2018backend",
+  "version": "1.0.0",
+  "description": "Backend of project for Hackbeanpot 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmelcer9/hbp2018.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmelcer9/hbp2018/issues"
+  },
+  "homepage": "https://github.com/dmelcer9/hbp2018#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.33.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.12"
+  }
+}
