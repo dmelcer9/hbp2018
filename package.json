@@ -17,10 +17,14 @@
   },
   "homepage": "https://github.com/dmelcer9/hbp2018#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "express": "^4.16.2",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.33.2"
+    "sequelize": "^4.33.2",
+    "sequelize-cli": "^3.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.14.12"
