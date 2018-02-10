@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 var bcrypt = require('bcrypt');
 var app = express();
 
-var port = 8080;
+var port = process.env.PORT || 8080;
 
 var authMiddleware = require("./user-auth.js")(db,['/createUser']);
 
