@@ -8,8 +8,8 @@ Task.belongsTo(User,{
   as: 'Assignee'
 });
 
-User.belongsToMany(Event, {through: "Membership"});
-Event.belongsToMany(User, {through: "Membership"});
+User.belongsToMany(Event, {through: "Membership", as: "events"});
+Event.belongsToMany(User, {through: "Membership", as: "users"});
 
 Event.hasMany(Task, {
   as: 'Tasks'
