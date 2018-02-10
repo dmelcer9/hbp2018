@@ -18,9 +18,14 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/',authMiddleware);
 
-app.post('/getEvents', async function(req, res){
-  var myId = req.user.id;
+function userIsInEvent(user, event){
+  var myId = user.id;
+  return event.users.some(userInEvent=>{
+    return myId === userInEvent.id;
+  })
+}
 
+app.post('/getEvents', async function(req, res){
   var allEvents = await db.Event.findAll({include:[{
     model: db.User,
     as:'users'
@@ -31,12 +36,44 @@ app.post('/getEvents', async function(req, res){
     model:db.Task,
     as:'Tasks'
   }]});
-  var myEvents = allEvents.filter(event=>{
-    return event.users.some(userInEvent=>{
-      return myId === userInEvent.id;
-    })
-  })
+
+  var myEvents = allEvents.filter(event=>userIsInEvent(req.user,event));
   res.json(myEvents.map(exporters.event));
+});
+
+app.post('/getEvent', async function(req, res){
+  const body = req.body;
+  if(!body.eventId){
+    res.status(400).send("Invalid params");
+    return;
+  }
+
+  var event = await db.Event.findOne({
+    where:{
+      eventCode: body.eventId
+    },
+    include:[{
+      model: db.User,
+      as:'users'
+    },{
+      model: db.User,
+      as:'owner'
+    },{
+      model:db.Task,
+      as:'Tasks'
+  }]});
+
+  if(!event){
+    res.status(400).send("Event does not exist");
+    return;
+  }
+
+  if(!userIsInEvent(req.user, event)){
+    res.status(400).send("User is not in event");
+    return;
+  }
+
+  res.json(exporters.event(event));
 });
 
 app.post('/createEvent', async function(req, res){
@@ -54,6 +91,44 @@ app.post('/createEvent', async function(req, res){
   });
   await event.setOwner(req.user);
   await event.setUsers([req.user]);
+  res.json(exporters.event(event));
+})
+
+app.post('/joinEvent', async function(req,res){
+  const body = req.body;
+  if(!body.eventId){
+    res.status(400).send("Invalid params");
+    return;
+  }
+
+  const event = await db.Event.findOne({
+    where:{
+      eventCode: body.eventId
+    },
+    include:[{
+      model: db.User,
+      as:'users'
+    },{
+      model: db.User,
+      as:'owner'
+    },{
+      model:db.Task,
+      as:'Tasks'
+    }]
+  })
+
+  if(!event){
+    res.status(400).send("Event does not exist");
+    return;
+  }
+
+  if(userIsInEvent(req.user, event)){
+    res.status(400).send("User is in event already!");
+    return;
+  }
+
+  event.addUser(req.user);
+
   res.json(exporters.event(event));
 })
 
