@@ -25,6 +25,55 @@ function userIsInEvent(user, event){
   })
 }
 
+async function getEventByID(id){
+  var event = await db.Event.findOne({
+    where:{
+      eventCode: id
+    },
+    include:[{
+      model: db.User,
+      as:'users'
+    },{
+      model: db.User,
+      as:'owner'
+    },{
+      model:db.Task,
+      as:'Tasks'
+  }]});
+
+  return event;
+}
+
+app.post('/createTask', async function(req, res){
+  var body = req.body;
+  if(!body.eventId || !body.name){
+    res.status(400).send("Invalid params");
+    return;
+  }
+
+  var event = await getEventByID(body.eventId);
+
+  if(!event){
+    res.status(400).send("Event does not exist");
+    return;
+  }
+
+  if(!userIsInEvent(req.user, event)){
+    res.status(400).send("User is not in event");
+    return;
+  }
+
+  var task = await db.Task.create({
+    name: body.name,
+    description: body.description,
+    completed: false
+  })
+
+  event.addTask(task);
+
+  res.json(exporters.task(task));
+})
+
 app.post('/getEvents', async function(req, res){
   var allEvents = await db.Event.findAll({include:[{
     model: db.User,
@@ -48,20 +97,7 @@ app.post('/getEvent', async function(req, res){
     return;
   }
 
-  var event = await db.Event.findOne({
-    where:{
-      eventCode: body.eventId
-    },
-    include:[{
-      model: db.User,
-      as:'users'
-    },{
-      model: db.User,
-      as:'owner'
-    },{
-      model:db.Task,
-      as:'Tasks'
-  }]});
+  var event = await getEventByID(body.eventId);
 
   if(!event){
     res.status(400).send("Event does not exist");
