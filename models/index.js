@@ -1,16 +1,26 @@
 'use strict';
 
 const Sequelize = require('sequelize');
-const params = require('../config-private.js');
+
 const fs = require('fs');
 const path = require('path');
 var basename  = path.basename(__filename);
 var db = {};
 
-const sequelize = new Sequelize("hbpbackend",params.dbuser, params.dbpass,{
-  host:'localhost',
-  dialect:'postgres'
-})
+
+var sequelize;
+try{
+  //On local machine
+  const params = require('../config-private.js');
+  sequelize = new Sequelize("hbpbackend",params.dbuser, params.dbpass,{
+    host:'localhost',
+    dialect:'postgres'
+  })
+} catch(error){
+  const dburl = process.env.DATABASE_URL;
+  sequelize = new Sequelize(dburl);
+}
+
 
 fs
   .readdirSync(__dirname)
