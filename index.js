@@ -205,7 +205,7 @@ app.post('/createUser', async function(req, res){
 
 //Creating db tables if they don't exist yet
 async function f(){
-  db.sequelize.sync();
+  await db.sequelize.sync();
   console.log("Listening on port " + port);
   app.listen(port);
 };
