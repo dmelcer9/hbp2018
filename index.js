@@ -10,14 +10,23 @@ var port = 8080;
 
 var authMiddleware = require("./user-auth.js")(db,['/createUser']);
 
+var exporters = require("./createJSON.js");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/',authMiddleware);
 
-app.post('/verifyLogin', async function(req, res){
+app.post('/createEvent', async function(req, res){
+  if(!body.firstName || !body.lastName){
+    res.status(400).send("Invalid params");
+    return;
+  }
+})
 
-  res.send("User " + req.user.uname + " logged in.");
+app.post('/getCurrentUser', async function(req, res){
+
+  res.json(exporters.user(req.user));
 
 })
 
@@ -39,7 +48,7 @@ app.post('/createUser', async function(req, res){
 
   var hashed = await bcrypt.hash(body.password, 10);
   console.log(hashed);
-  await models.User.create({
+  await db.User.create({
     firstName:body.firstName,
     lastName:body.lastName,
     uname:body.uname,
