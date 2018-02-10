@@ -37,6 +37,39 @@ router.post('', async function(req, res){
   res.json(exporters.task(task));
 })
 
+router.delete('/:id', async function(req,res){
+  var body = req.body;
+
+
+  var task = await db.Task.findOne({
+    where:{
+      id: req.params.id
+    },
+    include:[{
+      model: db.Event,
+      include:[{
+        model:db.User,
+        as:"users"
+      }]
+    }]
+  })
+
+  if(!task){
+    res.status(400).send("Invalid task id");
+    return;
+  }
+
+  if(h.userIsInEvent(req.user, task.Event)){
+    await task.destroy();
+    res.status(200).send("OK");
+  } else{
+    res.status(400).send("Invalid task id");
+    return;
+  }
+
+})
+
+
 router.put('/:id', async function(req, res){
 
   var body = req.body;

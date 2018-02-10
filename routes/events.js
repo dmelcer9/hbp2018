@@ -45,8 +45,8 @@ router.put('/:id',async function(req, res){
   if(typeof(body.date) !== "undefined"){
     toUpdate.date = new Date(body.date);
   }
-  if(typeof(body.place) !== "undefined"){
-    toUpdate.place = body.place;
+  if(typeof(body.location) !== "undefined"){
+    toUpdate.place = body.location;
   }
 
   await event.update(toUpdate);
@@ -103,7 +103,8 @@ router.post('/', async function(req, res){
     eventCode: evid,
     title: body.title,
     description: body.description,
-    date: Date.parse(body.date)
+    date: Date.parse(body.date),
+    location: body.location
   });
   await event.setOwner(req.user);
   await event.setUsers([req.user]);

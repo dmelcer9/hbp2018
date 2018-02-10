@@ -14,6 +14,7 @@ function evente(event){
     eventCode: event.eventCode,
     description: event.description,
     date: event.date,
+    location: event.location,
     users: (event.users)?event.users.map(usere):[],
     owner: usere(event.owner),
     tasks: (event.Tasks)?event.Tasks.map(taske):[]
