@@ -14,10 +14,11 @@ function evente(event){
     eventCode: event.eventCode,
     description: event.description,
     date: event.date,
-    users: event.users.map(usere),
+    users: (event.users)?event.users.map(usere):[],
     owner: usere(event.owner),
-    tasks: event.Tasks.map(taske)
+    tasks: (event.Tasks)?event.Tasks.map(taske):[]
   }
+
 }
 
 function taske(task){
