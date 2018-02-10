@@ -4,8 +4,9 @@
 module.exports = (sequelize, DataTypes) => {
   var Event = sequelize.define('Event', {
     eventCode: {type:DataTypes.STRING, allowNull:false},
+    title: {type:DataTypes.STRING, allowNull:false},
     description: DataTypes.STRING,
-    date: DataTypes.DATE,
+    date: {type:DataTypes.DATE, allowNull:false},
   });
 
   return Event;
