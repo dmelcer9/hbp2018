@@ -85,9 +85,10 @@ router.put('/:id', async function(req, res){
         return;
       }
 
-      toUpdate.Assignee = assignedUser;
+      task.Assignee = assignedUser;
     }
 
+    console.log(toUpdate);
     await task.update(toUpdate);
 
   } else{

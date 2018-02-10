@@ -14,10 +14,11 @@ User.belongsToMany(Event, {through: "Membership", as: "events"});
 Event.belongsToMany(User, {through: "Membership", as: "users"});
 
 Event.hasMany(Task, {
-  as: 'Tasks'
+  as: 'Tasks',
+  onDelete: 'cascade'
 });
 
-Task.belongsTo(Event);
+Task.belongsTo(Event,{onDelete:'cascade'});
 
 User.hasMany(Event,{
   as:'ownedEvents'

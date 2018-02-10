@@ -20,6 +20,60 @@ router.post('/all', async function(req, res){
   res.json(myEvents.map(exporters.event));
 });
 
+router.put('/:id',async function(req, res){
+  var body = req.body;
+  var event = await h.getEventByID(req.params.id);
+
+  if(!event){
+    res.status(400).send("Event does not exist");
+    return;
+  }
+
+  if(event.owner.id !== req.user.id){
+    res.status(400).send("You do not have permission to modify this event.");
+    return;
+  }
+
+  var toUpdate = {};
+
+  if(typeof(body.title) !== "undefined"){
+    toUpdate.title = body.title;
+  }
+  if(typeof(body.description) !== "undefined"){
+    toUpdate.description = body.description;
+  }
+  if(typeof(body.date) !== "undefined"){
+    toUpdate.date = new Date(body.date);
+  }
+  if(typeof(body.place) !== "undefined"){
+    toUpdate.place = body.place;
+  }
+
+  await event.update(toUpdate);
+
+  res.json(exporters.event(event));
+
+})
+
+router.delete('/:id', async function(req, res){
+  var event = await h.getEventByID(req.params.id);
+
+  if(!event){
+    res.status(400).send("Event does not exist");
+    return;
+  }
+
+  if(event.owner.id !== req.user.id){
+    res.status(400).send("You do not have permission to delete this event.");
+    return;
+  }
+
+  await event.destroy();
+
+  res.status(200).send("OK");
+
+})
+
 router.post('/:id', async function(req, res){
   const body = req.body;
 
