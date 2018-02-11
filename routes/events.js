@@ -17,7 +17,9 @@ router.post('/all', async function(req, res){
   }]});
 
   var myEvents = allEvents.filter(event=>h.userIsInEvent(req.user,event));
-  res.json(myEvents.map(exporters.event));
+  res.json({
+    events:myEvents.map(exporters.event)}
+  );
 });
 
 router.put('/:id',async function(req, res){
