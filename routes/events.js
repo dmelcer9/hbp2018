@@ -71,7 +71,7 @@ router.delete('/:id', async function(req, res){
 
   await event.destroy();
 
-  res.status(200).send("OK");
+  res.status(200).json({status:"OK"});
 
 })
 
