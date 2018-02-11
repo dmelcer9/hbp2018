@@ -96,10 +96,13 @@ router.put('/:id', async function(req, res){
   if(h.userIsInEvent(req.user, task.Event)){
 
     var toUpdate = {
-
+      name: task.name,
+      description: task.description,
+      completed: task.completed,
+      assigned: task.assigned
     }
 
-    if(typeof(body.name)!=="undefined"){
+    if(typeof(body.name)!=="undefined" && body.name !== null){
       toUpdate.name = body.name;
     }
 
