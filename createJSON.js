@@ -8,7 +8,6 @@ function usere(user){
 }
 
 function evente(event){
-  console.log(event);
   if(!event) return event;
   return {
     title: event.title,
