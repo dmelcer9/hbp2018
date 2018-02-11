@@ -95,6 +95,7 @@ router.post('/:id', async function(req, res){
 
 router.post('/', async function(req, res){
   const body = req.body;
+  console.log(body);
   if(!body.title || !body.date){
     res.status(400).send("Invalid params");
     return;
